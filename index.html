@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes">
+  <meta name="theme-color" content="#006666">
+  <title>Janazah Guide | دليل الجنازة</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&family=Noto+Nastaliq+Urdu:wght@400;500;600&family=Noto+Sans+Arabic:wght@400;500;600;700&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      overflow-x: hidden;
+      width: 100%;
+    }
+
+    body {
+      background: #000;
+      font-family: 'Inter', system-ui, sans-serif;
+      min-height: 100vh;
+      background-attachment: fixed;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body.dark {
+      background: radial-gradient(circle at top left, rgba(var(--accent-rgb, 0, 102, 102), 0.15), transparent 30%),
+                  radial-gradient(circle at bottom right, rgba(var(--accent-rgb, 0, 102, 102), 0.12), transparent 35%),
+                  #000000;
+      background-attachment: fixed;
+      --bg-primary: #000;
+      --surface-glass: rgba(18, 18, 24, 0.85);
+      --text-primary: #fff;
+      --text-secondary: #ccc;
+      --card-border: rgba(255, 255, 255, 0.1);
+    }
+
+    body.light {
+      background: radial-gradient(circle at top left, rgba(var(--accent-rgb, 0, 102, 102), 0.08), transparent 30%),
+                  radial-gradient(circle at bottom right, rgba(var(--accent-rgb, 0, 102, 102), 0.05), transparent 35%),
+                  #f5f7fb;
+      background-attachment: fixed;
+      --bg-primary: #f5f7fb;
+      --surface-glass: rgba(255, 255, 255, 0.9);
+      --text-primary: #111111;
+      --text-secondary: #555555;
+      --card-border: rgba(0, 0, 0, 0.08);
+    }
+
+    :root {
+      --card-radius: 24px;
+      --accent: #006666;
+      --accent-rgb: 0, 102, 102;
+      --accent-text: #fff;
+    }
+
+    .app {
+      max-width: 600px;
+      margin: 0 auto;
+      min-height: 100dvh;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      position: relative;
+    }
+
+    .glass-card, .popup-card, .modal-card, .onboarding-card {
+      border: 1px solid var(--card-border);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    }
+
+    /* تحسين شكل البطاقات للأدعية */
+    .dua-card {
+      background: linear-gradient(180deg, rgba(var(--accent-rgb), 0.08), transparent 30%), var(--surface-glass);
+      border-radius: 26px;
+      border: 1px solid var(--card-border);
+      padding: 0;
+      overflow: hidden;
+      width: 100%;
+      box-shadow: 0 18px 45px rgba(0,0,0,0.16);
+    }
+
+    .dua-header {
+      background: linear-gradient(135deg, rgba(var(--accent-rgb), 0.24), rgba(var(--accent-rgb), 0.06));
+      padding: 18px;
+      border-bottom: 1px solid var(--card-border);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .dua-header-icon {
+      width: 46px;
+      height: 46px;
+      border-radius: 15px;
+      background: linear-gradient(135deg, var(--accent), rgba(var(--accent-rgb), 0.72));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.35rem;
+      color: var(--accent-text);
+      box-shadow: 0 8px 20px rgba(var(--accent-rgb), 0.22);
+      flex-shrink: 0;
+    }
+
+    .dua-header-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1.3;
+    }
+
+    .dua-header-subtitle {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      font-weight: 500;
+      margin-top: 2px;
+    }
+
+    .dua-body {
+      padding: 18px;
+    }
+
+    .arabic-text {
+      direction: rtl;
+      text-align: right;
+      font-family: 'Amiri', 'Noto Sans Arabic', serif;
+      font-size: clamp(1.35rem, 2.9vw, 1.75rem);
+      line-height: 2.15;
+      background: linear-gradient(135deg, rgba(var(--accent-rgb), 0.10), rgba(255,255,255,0.025));
+      border: 1px solid rgba(var(--accent-rgb), 0.18);
+      padding: 18px 17px;
+      border-radius: 18px;
+      margin-bottom: 14px;
+      transition: all 0.3s ease;
+    }
+
+    .bottom-nav {
+      background: rgba(var(--accent-rgb), 0.2);
+      backdrop-filter: blur(20px);
+      border-radius: 60px;
+      margin: 12px 16px 20px;
+      padding: 6px 12px;
+      display: flex;
+      justify-content: space-around;
+      position: sticky;
+      bottom: 10px;
+      z-index: 200;
+    }
+    .nav-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      padding: 8px 0;
+      border-radius: 30px;
+      cursor: pointer;
+      color: var(--text-secondary);
+    }
+    .nav-item.active { background: rgba(var(--accent-rgb), 0.3); }
+    .nav-item.active .nav-icon { color: var(--accent); }
+    .nav-item .nav-label { font-size: 0.65rem; font-weight: 600; color: var(--text-primary); }
+
+    .progress-header { padding: 12px 20px 0; }
+    .progress-strip { display: flex; gap: 8px; margin-bottom: 6px; }
+    .prog-segment { flex: 1; height: 4px; background: rgba(128,128,128,0.3); border-radius: 4px; overflow: hidden; }
+    .prog-fill { width: 0%; height: 100%; background: var(--accent); transition: width 0.3s ease; }
+
+    .swipe-container { flex: 1; overflow: hidden; width: 100%; position: relative; }
+    .swipe-track { display: flex; transition: transform 0.25s ease; width: 100%; }
+    .swipe-slide { width: 100%; min-width: 100%; flex-shrink: 0; padding: 0 12px; display: flex; justify-content: center; align-items: flex-start; }
+    .glass-card { width: 100%; background: var(--surface-glass); border-radius: var(--card-radius); padding: 24px 20px; }
+
+    .desktop-nav-btn {
+      position: absolute; top: 45%; transform: translateY(-50%); width: 44px; height: 44px;
+      border-radius: 50%; background: rgba(var(--accent-rgb), 0.4); color: #fff;
+      border: 1px solid rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center;
+      cursor: pointer; font-size: 1.3rem; z-index: 150;
+    }
+    .desktop-nav-btn.prev { left: 8px; }
+    .desktop-nav-btn.next { right: 8px; }
+
+    @media (max-width: 767px) {
+      .desktop-nav-btn { display: none !important; }
+    }
+
+    .card-actions-row { display: flex; gap: 10px; margin-top: 16px; }
+
+    .mode-toggle { display: flex; gap: 10px; background: rgba(128,128,128,0.1); border-radius: 50px; padding: 4px; margin-bottom: 16px; }
+    .mode-opt { flex: 1; text-align: center; padding: 8px 0; border-radius: 50px; font-weight: 600; font-size: 0.8rem; cursor: pointer; color: var(--text-secondary); }
+    .mode-opt.active { background: var(--accent); color: var(--accent-text); }
+
+    .panel { display: none; padding: 20px 16px; flex: 1; overflow-y: auto; }
+    .panel.active { display: block; }
+
+    .coming-soon-wrapper { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 55vh; }
+    .coming-soon-title { font-size: clamp(2.5rem, 6vw, 3.5rem); font-weight: 900; color: var(--accent); letter-spacing: 2px; }
+
+    .lang-grid-container { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 14px; }
+    .lang-btn-item {
+      display: flex; align-items: center; gap: 10px; min-height: 54px; padding: 12px 15px;
+      background: linear-gradient(145deg, rgba(128,128,128,0.10), rgba(128,128,128,0.035));
+      border: 1px solid var(--card-border); border-radius: 17px; cursor: pointer;
+      font-size: 0.92rem; font-weight: 650; color: var(--text-primary);
+      transition: transform .18s ease, background .18s ease, border-color .18s ease, box-shadow .18s ease;
+    }
+    .lang-btn-item:hover {
+      transform: translateY(-1px); border-color: rgba(var(--accent-rgb), .38);
+      box-shadow: 0 8px 22px rgba(var(--accent-rgb), .10);
+    }
+    .lang-btn-item.active {
+      background: linear-gradient(135deg, var(--accent), rgba(var(--accent-rgb), .78));
+      color: var(--accent-text); border-color: var(--accent);
+      box-shadow: 0 9px 24px rgba(var(--accent-rgb), .20);
+    }
+    .lang-btn-item span:first-child { font-size: 1.25rem; line-height: 1; flex-shrink: 0; }
+
+    .setting-group { margin-bottom: 24px; }
+    .setting-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; color: var(--text-secondary); font-weight: 600; }
+
+    .pill-button-group { display: flex; background: rgba(128, 128, 128, 0.1); border-radius: 60px; padding: 4px; gap: 4px; }
+    .pill-btn { flex: 1; text-align: center; padding: 10px 16px; border-radius: 60px; font-size: 0.85rem; font-weight: 600; cursor: pointer; color: var(--text-secondary); background: transparent; border: none; }
+    .pill-btn.active { background: var(--accent); color: var(--accent-text); }
+
+    .styled-action-btn { width: 100%; padding: 12px 18px; border-radius: 60px; font-size: 0.85rem; font-weight: 600; cursor: pointer; border: 1px solid var(--card-border); background: rgba(128, 128, 128, 0.08); color: var(--text-primary); margin-top: 8px; }
+
+    .color-palette { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin: 14px 0; }
+    .color-circle { width: 42px; height: 42px; border-radius: 50%; border: 2px solid rgba(128,128,128,0.3); cursor: pointer; }
+    .color-circle.active { border: 3px solid var(--accent); transform: scale(1.08); }
+
+    .onboarding-overlay {
+      position: fixed; inset: 0; z-index: 10000; display: flex; align-items: center; justify-content: center;
+      background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(15px);
+    }
+    .onboarding-card { width: 90%; max-width: 400px; border-radius: 32px; padding: 28px 24px; text-align: center; background: var(--surface-glass); color: var(--text-primary); }
+
+    .checkbox-container {
+      display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 16px; margin-bottom: 8px; cursor: pointer; user-select: none; font-size: 0.9rem; color: var(--text-secondary);
+    }
+    .checkbox-container input { width: 18px; height: 18px; cursor: pointer; accent-color: var(--accent); }
+
+    .btn-primary { background: var(--accent); border: none; border-radius: 60px; padding: 14px; width: 100%; font-weight: 700; margin-top: 12px; cursor: pointer; color: var(--accent-text); }
+    .btn-secondary { background: rgba(128, 128, 128, 0.2); border: 1px solid var(--card-border); border-radius: 60px; padding: 12px; width: 100%; font-weight: 600; margin-top: 8px; cursor: pointer; color: var(--text-primary); }
+
+    .modal, .popup-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(12px);
+      z-index: 20000; display: flex; align-items: center; justify-content: center;
+      visibility: hidden; opacity: 0; transition: 0.2s;
+    }
+    .modal.active, .popup-overlay.active { visibility: visible; opacity: 1; }
+    .modal-card, .popup-card { background: var(--surface-glass); color: var(--text-primary); border-radius: 32px; padding: 24px; width: 90%; max-width: 360px; text-align: center; }
+    .qr-container { background: #fff; border-radius: 20px; padding: 12px; margin: 12px auto; display: inline-block; }
+    .qr-label { color: var(--text-primary); font-weight: 700; font-size: 1.1rem; }
+
+    .premium-color-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin: 16px 0; max-height: 240px; overflow-y: auto; }
+    .premium-color-swatch { aspect-ratio: 1; border-radius: 12px; cursor: pointer; border: 2px solid transparent; }
+    .premium-color-swatch.selected { border-color: var(--text-primary); transform: scale(1.05); }
+    
+    .transliteration {
+      font-style: italic;
+      color: var(--text-secondary);
+      margin: 0 2px 10px;
+      padding: 10px 12px;
+      background: rgba(128,128,128,0.06);
+      border-radius: 12px;
+      font-size: 0.85rem;
+      line-height: 1.55;
+    }
+    
+    .translation {
+      color: var(--text-primary);
+      margin: 0 2px 14px;
+      padding: 12px 13px;
+      background: rgba(var(--accent-rgb), 0.055);
+      border: 1px solid rgba(var(--accent-rgb), 0.10);
+      border-radius: 13px;
+      font-size: 0.96rem;
+      line-height: 1.7;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Onboarding Modal Step 1: Language Selection -->
+<div id="langOnboardingModal" class="onboarding-overlay" style="display:none;">
+  <div class="onboarding-card">
+    <div style="font-size:2.5rem; margin-bottom:10px;">🌐</div>
+    <h2 id="onboardLangTitle" style="margin-bottom:14px;">Select Language | اختر اللغة</h2>
+    <div class="lang-grid-container" id="onboardLangGrid"></div>
+    
+    <label class="checkbox-container">
+      <input type="checkbox" id="dontAskCheckbox">
+      <span id="dontAskLabel">Don't ask me again</span>
+    </label>
+
+    <button id="saveLangBtn" class="btn-primary" onclick="proceedToColorOnboarding()">Continue →</button>
+  </div>
+</div>
+
+<!-- Onboarding Modal Step 2: Theme Color Selection -->
+<div id="colorOnboardingModal" class="onboarding-overlay" style="display:none;">
+  <div class="onboarding-card">
+    <div style="font-size:2.5rem; margin-bottom:10px;">🎨</div>
+    <h2 id="onboardColorTitle">Choose Theme Color | اختر اللون المميز</h2>
+    <div class="color-palette" id="onboardColorPalette"></div>
+    <button id="startAppBtn" class="btn-primary" onclick="finishOnboarding()">Start App</button>
+  </div>
+</div>
+
+<div class="app" id="app">
+  <div class="progress-header" id="progressHeader">
+    <div class="progress-strip" id="progressContainer"></div>
+  </div>
+  
+  <div class="swipe-container" id="swipeContainer">
+    <button class="desktop-nav-btn prev" onclick="goToStep(currentStep - 1)">❮</button>
+    <button class="desktop-nav-btn next" onclick="goToStep(currentStep + 1)">❯</button>
+    <div class="swipe-track" id="swipeTrack"></div>
+  </div>
+  
+  <div id="extrasPanel" class="panel"></div>
+  <div id="settingsPanel" class="panel"></div>
+  <div id="languagePanel" class="panel"></div>
+  
+  <div class="bottom-nav" id="bottomNav">
+    <div id="navGuide" class="nav-item active"><div class="nav-icon">📖</div><div class="nav-label" id="guideLabel">Guide</div></div>
+    <div id="navExtras" class="nav-item"><div class="nav-icon">✨</div><div class="nav-label" id="extrasLabel">Extras</div></div>
+    <div id="navSettings" class="nav-item"><div class="nav-icon">⚙️</div><div class="nav-label" id="settingsLabel">Settings</div></div>
+    <div id="navLanguage" class="nav-item"><div class="nav-icon">🌐</div><div class="nav-label" id="languageLabel">Language</div></div>
+  </div>
+</div>
+
+<div id="qrPopup" class="popup-overlay">
+  <div class="popup-card">
+    <div class="qr-label" id="qrLabel">Share the Reward | شارك الأجر</div>
+    <div class="qr-container"><div id="qrCodeBox"></div></div>
+    <button id="closeQrBtn" class="btn-secondary" onclick="closePopup('qrPopup')">Close</button>
+  </div>
+</div>
+
+<div id="customColorModal" class="modal">
+  <div class="modal-card">
+    <h3 id="modalTitle" style="margin-bottom: 12px;">Additional Colors</h3>
+    <div class="premium-color-grid" id="premiumColorGrid"></div>
+    <button onclick="closeModal()" class="btn-secondary" style="margin-top:14px;">Close</button>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+<script>
+  const stepsData = [
+    { 
+      title: { English: "First Takbeer - Surah Al-Fatihah", العربية: "التكبيرة الأولى - سورة الفاتحة", اردو: "پہلی تکبیر - سورۃ الفاتحہ", Français: "Premier Takbir - Sourate Al-Fatiha", Deutsch: "Erster Takbir - Sure Al-Fatiha", Русский: "Первый такбир - Сура Аль-Фатиха", Español: "Primer Takbir - Sura Al-Fatiha", हिन्दी: "पहली तकबीर - सूरह अल-फ़ातिहा", Indonesia: "Takbir Pertama - Surah Al-Fatihah" },
+      icon: "📖",
+      arabic: "بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ * الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ * الرَّحْمَنِ الرَّحِيمِ * مَالِكِ يَوْمِ الدِّينِ * إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ * اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ * صِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلَا الضَّالِّينَ", 
+      translit: "Bismillahir-Rahmanir-Raheem, Alhamdu lillahi rabbil 'aalameen, Ar-Rahmanir-Raheem, Maliki yawmid-deen, Iyyaka na'budu wa iyyaka nasta'een, Ihdinas-siratal-mustaqeem, Siratal-latheena an'amta 'alayhim ghayril-maghdoobi 'alayhim wa lad-daalleen", 
+      translations: { 
+        English:"In the name of Allah, the Most Gracious, the Most Merciful. All praise is due to Allah, Lord of the worlds. The Most Gracious, the Most Merciful. Master of the Day of Judgment. You alone we worship, and You alone we ask for help. Guide us to the straight path. The path of those You have blessed, not of those who earned anger, nor of those who went astray.", 
+        العربية:"بسم الله الرحمن الرحيم. الحمد لله رب العالمين. الرحمن الرحيم. مالك يوم الدين. إياك نعبد وإياك نستعين. اهدنا الصراط المستقيم. صراط الذين أنعمت عليهم غير المغضوب عليهم ولا الضالين.", 
+        Français:"Au nom d'Allah, le Tout Miséricordieux, le Très Miséricordieux. Louange à Allah, Seigneur de l'univers. Le Tout Miséricordieux, le Très Miséricordieux. Maître du Jour de la rétribution. C'est Toi seul que nous adorons, et c'est Toi seul dont nous implorons secours. Guide-nous dans le droit chemin. Le chemin de ceux que Tu as comblés de faveurs, non pas de ceux qui ont encouru Ta colère, ni des égarés.", 
+        اردو:"اللہ کے نام سے جو بڑا مہربان نہایت رحم والا ہے۔ تمام تعریفیں اللہ کے لیے ہیں جو تمام جہانوں کا رب ہے۔ بڑا مہربان، نہایت رحم والا۔ روزِ جزا کا مالک۔ ہم صرف تیری ہی عبادت کرتے ہیں اور تجھ ہی سے مدد مانگتے ہیں۔ ہمیں سیدھا راستہ دکھا۔ ان لوگوں کا راستہ جن پر تو نے انعام کیا، نہ ان کا جن پر غضب ہوا اور نہ گمراہوں کا۔", 
+        Deutsch:"Im Namen Allahs, des Allerbarmers, des Barmherzigen. Alles Lob gebührt Allah, dem Herrn der Welten. Dem Allerbarmers, dem Barmherzigen. Dem Herrscher am Tag des Gerichts. Dir allein dienen wir, und Dich allein bitten wir um Hilfe. Führe uns den geraden Weg. Den Weg derer, denen Du Gnade erwiesen hast, nicht derer, die Zorn erregt haben, und nicht der Irrenden.", 
+        Русский:"Во имя Аллаха, Милостивого, Милосердного. Хвала Аллаху, Господу миров. Милостивому, Милосердному. Властелину Судного дня. Тебе одному мы поклоняемся и Тебя одного молим о помощи. Веди нас прямым путём. Путём тех, кого Ты облагодетельствовал, не тех, на кого пал гнев, и не заблудших.", 
+        Español:"En el nombre de Alá, el Más Misericordioso, el Más Compasivo. Toda alabanza pertenece a Alá, Señor de los mundos. El Más Misericordioso, el Más Compasivo. Soberano del Día del Juicio. Solo a Ti te adoramos y solo a Ti te pedimos ayuda. Guíanos por el camino recto. El camino de aquellos a quienes has favorecido, no el de los que han incurrido en Tu ira, ni el de los extraviados.", 
+        हिन्दी:"अल्लाह के नाम से, जो बड़ा मेहरबान और निहायत रहम वाला है। सारी तारीफ़ अल्लाह के लिए है, जो सारे जहानों का रब है। बड़ा मेहरबान, निहायत रहम वाला। क़यामत के दिन का मालिक। हम सिर्फ़ तेरी ही इबादत करते हैं और सिर्फ़ तुझसे ही मदद माँगते हैं। हमें सीधा रास्ता दिखा। उन लोगों का रास्ता जिन पर तूने इनाम किया, न उनका जिन पर ग़ज़ब हुआ और न गुमराहों का।", 
+        Indonesia:"Dengan nama Allah Yang Maha Pengasih lagi Maha Penyayang. Segala puji bagi Allah, Tuhan seluruh alam. Yang Maha Pengasih lagi Maha Penyayang. Pemilik hari pembalasan. Hanya kepada-Mu kami menyembah dan hanya kepada-Mu kami memohon pertolongan. Tunjukilah kami jalan yang lurus. Yaitu jalan orang-orang yang telah Engkau beri nikmat, bukan jalan mereka yang dimurkai, dan bukan pula jalan mereka yang sesat." 
+      } 
+    },
+    { 
+      title: { English: "Second Takbeer - The Ibrahimiyyah Prayer", العربية: "التكبيرة الثانية - الصلاة الإبراهيمية", اردو: "دوسری تکبیر - درود ابراہیمی", Français: "Deuxième Takbir - La Prière Ibrahimiyyah", Deutsch: "Zweiter Takbir - Das Ibrahimitische Gebet", Русский: "Второй такбир - Ибрахимова молитва", Español: "Segundo Takbir - La Oración Ibrahimiyyah", हिन्दी: "दूसरी तकबीर - इब्राहीमी दुआ", Indonesia: "Takbir Kedua - Shalawat Ibrahimiyah" },
+      icon: "🕌",
+      arabic: "اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ، كَمَا صَلَّيْتَ عَلَى إِبْرَاهِيمَ وَعَلَى آلِ إِبْرَاهِيمَ، إِنَّكَ حَمِيدٌ مَجِيدٌ، اللَّهُمَّ بَارِكْ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ، كَمَا بَارَكْتَ عَلَى إِبْرَاهِيمَ وَعَلَى آلِ إِبْرَاهِيمَ، إِنَّكَ حَمِيدٌ مَجِيدٌ", 
+      translit: "Allahumma salli 'ala Muhammadin wa 'ala aali Muhammad, kama sallayta 'ala Ibrahima wa 'ala aali Ibrahim, innaka Hamidun Majeed. Allahumma barik 'ala Muhammadin wa 'ala aali Muhammad, kama barakta 'ala Ibrahima wa 'ala aali Ibrahim, innaka Hamidun Majeed", 
+      translations: { 
+        English:"O Allah, send prayers upon Muhammad and upon the family of Muhammad, as You sent prayers upon Abraham and upon the family of Abraham. Indeed, You are Praiseworthy, Glorious. O Allah, send blessings upon Muhammad and upon the family of Muhammad, as You sent blessings upon Abraham and upon the family of Abraham. Indeed, You are Praiseworthy, Glorious.", 
+        العربية:"اللهم صل على محمد وعلى آل محمد، كما صليت على إبراهيم وعلى آل إبراهيم، إنك حميد مجيد. اللهم بارك على محمد وعلى آل محمد، كما باركت على إبراهيم وعلى آل إبراهيم، إنك حميد مجيد.", 
+        Français:"Ô Allah, prie sur Muhammad et sur la famille de Muhammad, comme Tu as prié sur Abraham et sur la famille d'Abraham. Tu es certes Digne de louange et de gloire. Ô Allah, bénis Muhammad et la famille de Muhammad, comme Tu as béni Abraham et la famille d'Abraham. Tu es certes Digne de louange et de gloire.", 
+        اردو:"اے اللہ! محمد اور آل محمد پر رحمت نازل فرما، جیسا کہ تو نے ابراہیم اور آل ابراہیم پر رحمت نازل کی۔ بے شک تو قابلِ تعریف اور بزرگ ہے۔ اے اللہ! محمد اور آل محمد پر برکت نازل فرما، جیسا کہ تو نے ابراہیم اور آل ابراہیم پر برکت نازل کی۔ بے شک تو قابلِ تعریف اور بزرگ ہے۔", 
+        Deutsch:"O Allah, sende Frieden auf Muhammad und auf die Familie Muhammads, wie Du Frieden auf Abraham und auf die Familie Abrahams gesandt hast. Wahrlich, Du bist der Preiswürdige, der Ruhmreiche. O Allah, segne Muhammad und die Familie Muhammads, wie Du Abraham und die Familie Abrahams gesegnet hast. Wahrlich, Du bist der Preiswürdige, der Ruhmreiche.", 
+        Русский:"О Аллах, благослови Мухаммада и семейство Мухаммада, как благословил Ты Ибрахима и семейство Ибрахима. Поистине, Ты Достойный хвалы, Славный. О Аллах, пошли благословения Мухаммаду и семейству Мухаммада, как послал Ты благословения Ибрахиму и семейству Ибрахима. Поистине, Ты Достойный хвалы, Славный.", 
+        Español:"Oh Allah, envía paz sobre Muhammad y sobre la familia de Muhammad, como enviaste paz sobre Abraham y sobre la familia de Abraham. Ciertamente, Tú eres Digno de alabanza, Glorioso. Oh Allah, bendice a Muhammad y a la familia de Muhammad, como bendijiste a Abraham y a la familia de Abraham. Ciertamente, Tú eres Digno de alabanza, Glorioso.", 
+        हिन्दी:"ऐ अल्लाह, मुहम्मद और मुहम्मद के परिवार पर दया भेज, जैसे तूने इब्राहीम और इब्राहीम के परिवार पर दया भेजी। बेशक तू प्रशंसनीय और महान है। ऐ अल्लाह, मुहम्मद और मुहम्मद के परिवार पर बरकत भेज, जैसे तूने इब्राहीम और इब्राहीम के परिवार पर बरकत भेजी। बेशक तू प्रशंसनीय और महान है।", 
+        Indonesia:"Ya Allah, limpahkan rahmat kepada Muhammad dan keluarga Muhammad, sebagaimana Engkau melimpahkan rahmat kepada Ibrahim dan keluarga Ibrahim. Sesungguhnya Engkau Maha Terpuji lagi Maha Mulia. Ya Allah, berkahilah Muhammad dan keluarga Muhammad, sebagaimana Engkau memberkahi Ibrahim dan keluarga Ibrahim. Sesungguhnya Engkau Maha Terpuji lagi Maha Mulia." 
+      } 
+    },
+    { 
+      title: { English: "Third Takbeer - Dua for the Deceased", العربية: "التكبيرة الثالثة - الدعاء للميت", اردو: "تیسری تکبیر - میت کے لیے دعا", Français: "Troisième Takbir - Invocation pour le défunt", Deutsch: "Dritter Takbir - Bittgebet für den Verstorbenen", Русский: "Третий такбир - Мольба за умершего", Español: "Tercer Takbir - Súplica por el difunto", हिन्दी: "तीसरी तकबीर - मृतक के लिए दुआ", Indonesia: "Takbir Ketiga - Doa untuk Mayit" },
+      icon: "🤲",
+      arabic: "اللَّهُمَّ اغْفِرْ لَهُ وَارْحَمْهُ وَعَافِهِ وَاعْفُ عَنْهُ، وَأَكْرِمْ نُزُلَهُ، وَوَسِّعْ مُدْخَلَهُ، وَاغْسِلْهُ بِالْمَاءِ وَالثَّلْجِ وَالْبَرَدِ، وَنَقِّهِ مِنَ الْخَطَايَا كَمَا نَقَّيْتَ الثَّوْبَ الْأَبْيَضَ مِنَ الدَّنَسِ، وَأَبْدِلْهُ دَارًا خَيْرًا مِنْ دَارِهِ، وَأَهْلًا خَيْرًا مِنْ أَهْلِهِ، وَزَوْجًا خَيْرًا مِنْ زَوْجِهِ، وَأَدْخِلْهُ الْجَنَّةَ وَأَعِذْهُ مِنْ عَذَابِ الْقَبْرِ، وَمِنْ عَذَابِ النَّارِ", 
+      translit: "Allahumma-ghfir lahu warhamhu wa 'aafihi wa'fu 'anhu, wa akrim nuzulahu, wa wassi' mudkhalahu, waghsilhu bil-ma'i wath-thalji wal-barad, wa naqqihi minal-khataya kama naqqaytath-thawbal-abyada minad-danas, wa abdilhu daran khayran min darihi, wa ahlan khayran min ahlihi, wa zawjan khayran min zawjihi, wa adkhilhul-jannata wa a'idh-hu min 'adhabil-qabri, wa min 'adhabin-nar", 
+      translations: { 
+        English:"O Allah, forgive him and have mercy on him, and grant him well-being and pardon him. Honor his abode, and widen his entrance, and wash him with water, snow and hail, and purify him from sins as You purified the white garment from dirt. And exchange his home for a better home, and his family for a better family, and his spouse for a better spouse. Admit him to Paradise and protect him from the punishment of the grave and from the punishment of the Fire.", 
+        العربية:"اللهم اغفر له وارحمه وعافه واعف عنه، وأكرم نزله، ووسع مدخله، واغسله بالماء والثلج والبرد، ونقه من الخطايا كما نقيت الثوب الأبيض من الدنس، وأبدله داراً خيراً من داره، وأهلاً خيراً من أهله، وزوجاً خيراً من زوجه، وأدخله الجنة وأعذه من عذاب القبر ومن عذاب النار.", 
+        Français:"Ô Allah, pardonne-lui et fais-lui miséricorde, et accorde-lui le bien-être et pardonne-lui. Honore sa demeure, élargis son entrée, et lave-le avec l'eau, la neige et la grêle, et purifie-le des péchés comme Tu as purifié le vêtement blanc de la saleté. Et remplace sa maison par une meilleure maison, et sa famille par une meilleure famille, et son épouse par une meilleure épouse. Fais-le entrer au Paradis et protège-le du châtiment de la tombe et du châtiment du Feu.", 
+        اردو:"اے اللہ! اسے بخش دے اور اس پر رحم فرما، اور اسے عافیت دے اور اسے معاف کر دے۔ اس کی مہمانی کا اکرام فرما، اور اس کی داخل ہونے کی جگہ وسیع فرما، اور اسے پانی، برف اور اولوں سے دھو دے، اور اسے گناہوں سے اس طرح پاک کر دے جیسے تو نے سفید کپڑے کو میل سے پاک کیا۔ اور اسے اس کے گھر سے بہتر گھر دے، اور اس کے اہل سے بہتر اہل دے، اور اس کی بیوی سے بہتر بیوی دے۔ اسے جنت میں داخل فرما اور قبر کے عذاب اور آگ کے عذاب سے بچا۔", 
+        Deutsch:"O Allah, vergib ihm und erbarme dich seiner, und gewähre ihm Wohlbefinden und verzeih ihm. Ehre seine Unterkunft und erweitere seinen Eingang, und wasche ihn mit Wasser, Schnee und Hagel, und reinige ihn von Sünden, wie Du das weiße Gewand von Schmutz gereinigt hast. Und ersetze sein Haus durch ein besseres Haus, und seine Familie durch eine bessere Familie, und seinen Ehepartner durch einen besseren Ehepartner. Lass ihn ins Paradies eintreten und schütze ihn vor der Strafe des Grabes und vor der Strafe des Feuers.", 
+        Русский:"О Аллах, прости его и помилуй его, и даруй ему благополучие и прости его. Окажи ему почести и расширь его вход, и омой его водой, снегом и градом, и очисти его от грехов, как очистил Ты белую одежду от грязи. И замени его дом лучшим домом, и его семью лучшей семьёй, и его супругу лучшей супругой. Введи его в Рай и защити его от наказания могилы и от наказания Огня.", 
+        Español:"Oh Allah, perdónalo y ten misericordia de él, y concédele bienestar y perdónalo. Honra su morada, y amplía su entrada, y lávalo con agua, nieve y granizo, y purifícalo de los pecados como purificaste la prenda blanca de la suciedad. Y reemplaza su hogar por un hogar mejor, y su familia por una familia mejor, y su cónyuge por un cónyuge mejor. Hazlo entrar al Paraíso y protégelo del castigo de la tumba y del castigo del Fuego.", 
+        हिन्दी:"ऐ अल्लाह, इसे क्षमा कर और इस पर दया कर, और इसे आफ़ियत दे और इसे माफ़ कर दे। इसकी मेज़बानी का सम्मान कर, और इसके दाख़िल होने की जगह को वसीअ कर, और इसे पानी, बर्फ़ और ओलों से धो दे, और इसे गुनाहों से इस तरह पाक कर दे जैसे तूने सफ़ेद कपड़े को गंदगी से पाक किया। और इसे इसके घर से बेहतर घर दे, और इसके परिवार से बेहतर परिवार दे, और इसकी पत्नी से बेहतर पत्नी दे। इसे जन्नत में दाख़िल कर और क़ब्र के अज़ाब और आग के अज़ाब से बचा।", 
+        Indonesia:"Ya Allah, ampunilah dia dan rahmatilah dia, dan berikanlah dia kesejahteraan dan maafkanlah dia. Muliakanlah tempat tinggalnya, dan luaskanlah tempat masuknya, dan basuhlah dia dengan air, salju dan hujan es, dan bersihkanlah dia dari dosa-dosa sebagaimana Engkau membersihkan pakaian putih dari kotoran. Dan gantikanlah rumahnya dengan rumah yang lebih baik, dan keluarganya dengan keluarga yang lebih baik, dan pasangannya dengan pasangan yang lebih baik. Masukkanlah dia ke dalam surga dan lindungilah dia dari siksa kubur dan dari siksa neraka." 
+      } 
+    },
+    { 
+      title: { English: "Fourth Takbeer - Dua for all Muslims", العربية: "التكبيرة الرابعة - الدعاء لعموم المسلمين", اردو: "چوتھی تکبیر - تمام مسلمانوں کے لیے دعا", Français: "Quatrième Takbir - Invocation pour tous les musulmans", Deutsch: "Vierter Takbir - Bittgebet für alle Muslime", Русский: "Четвёртый такбир - Мольба за всех мусульман", Español: "Cuarto Takbir - Súplica por todos los musulmanes", हिन्दी: "चौथी तकबीर - सभी मुसलमानों के लिए दुआ", Indonesia: "Takbir Keempat - Doa untuk seluruh kaum muslimin" },
+      icon: "🌍",
+      arabic: "اللَّهُمَّ اغْفِرْ لِحَيِّنَا وَمَيِّتِنَا، وَشَاهِدِنَا وَغَائِبِنَا، وَصَغِيرِنَا وَكَبِيرِنَا، وَذَكَرِنَا وَأُنْثَانَا، اللَّهُمَّ مَنْ أَحْيَيْتَهُ مِنَّا فَأَحْيِهِ عَلَى الْإِسْلَامِ، وَمَنْ تَوَفَّيْتَهُ مِنَّا فَتَوَفَّهُ عَلَى الْإِيمَانِ، اللَّهُمَّ لَا تَحْرِمْنَا أَجْرَهُ، وَلَا تُضِلَّنَا بَعْدَهُ", 
+      translit: "Allahumma-ghfir lihayyina wa mayyitina, wa shahidina wa gha'ibina, wa saghirina wa kabirina, wa dhakarina wa unthana. Allahumma man ahyaytahu minna fa'ahyihi 'alal-Islam, wa man tawaffaytahu minna fatawaffahu 'alal-iman. Allahumma la tahrimna ajrahu, wa la tudillana ba'dahu", 
+      translations: { 
+        English:"O Allah, forgive our living and our dead, our present and our absent, our young and our old, our males and our females. O Allah, whoever You keep alive from among us, keep him alive upon Islam, and whoever You cause to die from among us, cause him to die upon faith. O Allah, do not deprive us of his reward, and do not let us go astray after him.", 
+        العربية:"اللهم اغفر لحينا وميتنا، وشاهدنا وغائبنا، وصغيرنا وكبيرنا، وذكرنا وأنثانا. اللهم من أحييته منا فأحيه على الإسلام، ومن توفيته منا فتوفه على الإيمان. اللهم لا تحرمنا أجره، ولا تضلنا بعده.", 
+        Français:"Ô Allah, pardonne nos vivants et nos morts, nos présents et nos absents, nos petits et nos grands, nos mâles et nos femelles. Ô Allah, celui d'entre nous que Tu maintiens en vie, maintiens-le en vie sur l'Islam, et celui d'entre nous que Tu fais mourir, fais-le mourir sur la foi. Ô Allah, ne nous prive pas de sa récompense, et ne nous égare pas après lui.", 
+        اردو:"اے اللہ! ہمارے زندوں اور ہمارے مردوں کو، ہمارے حاضر اور ہمارے غائب کو، ہمارے چھوٹے اور ہمارے بڑے کو، ہمارے مردوں اور ہماری عورتوں کو بخش دے۔ اے اللہ! ہم میں سے جسے تو زندہ رکھے اسے اسلام پر زندہ رکھ، اور ہم میں سے جسے تو وفات دے اسے ایمان پر وفات دے۔ اے اللہ! ہمیں اس کے اجر سے محروم نہ کر، اور اس کے بعد ہمیں گمراہ نہ کر۔", 
+        Deutsch:"O Allah, vergib unseren Lebenden und unseren Toten, unseren Anwesenden und unseren Abwesenden, unseren Jungen und unseren Alten, unseren Männern und unseren Frauen. O Allah, wen von uns Du am Leben erhältst, den erhalte am Leben auf dem Islam, und wen von uns Du sterben lässt, den lasse sterben auf dem Glauben. O Allah, beraube uns nicht seines Lohnes, und lass uns nach ihm nicht irregehen.", 
+        Русский:"О Аллах, прости наших живых и наших мёртвых, наших присутствующих и наших отсутствующих, наших малых и наших старых, наших мужчин и наших женщин. О Аллах, кого из нас Ты оставишь в живых, того оставь в живых на Исламе, а кого из нас Ты упокоишь, того упокой на вере. О Аллах, не лиши нас награды за него и не введи нас в заблуждение после него.", 
+        Español:"Oh Allah, perdona a nuestros vivos y a nuestros muertos, a nuestros presentes y a nuestros ausentes, a nuestros pequeños y a nuestros mayores, a nuestros hombres y a nuestras mujeres. Oh Allah, a quien de nosotros mantengas con vida, mantenlo con vida sobre el Islam, y a quien de nosotros hagas morir, hazlo morir sobre la fe. Oh Allah, no nos prives de su recompensa, y no nos desvíes después de él.", 
+        हिन्दी:"ऐ अल्लाह, हमारे ज़िंदों और हमारे मुर्दों को, हमारे हाज़िर और हमारे ग़ायब को, हमारे छोटे और हमारे बड़े को, हमारे मर्दों और हमारी औरतों को बख़्श दे। ऐ अल्लाह, हम में से जिसे तू ज़िंदा रखे उसे इस्लाम पर ज़िंदा रख, और हम में से जिसे तू मौत दे उसे ईमान पर मौत दे। ऐ अल्लाह, हमें उसके अज्र से महरूम न कर, और उसके बाद हमें गुमराह न कर।", 
+        Indonesia:"Ya Allah, ampunilah orang-orang yang masih hidup di antara kami dan yang telah wafat, yang hadir dan yang tidak hadir, yang kecil dan yang besar, laki-laki dan perempuan kami. Ya Allah, siapa yang Engkau hidupkan di antara kami, maka hidupkanlah dia di atas Islam, dan siapa yang Engkau wafatkan di antara kami, maka wafatkanlah dia di atas iman. Ya Allah, janganlah Engkau halangi kami dari pahalanya, dan janganlah Engkau sesatkan kami setelahnya." 
+      } 
+    }
+  ];
+
+  const languages = [
+    { code:"English", name:"English", flag:"🇬🇧" },
+    { code:"العربية", name:"العربية", flag:"🇸🇦" },
+    { code:"اردو", name:"اردو", flag:"🇵🇰" },
+    { code:"Français", name:"Français", flag:"🇫🇷" },
+    { code:"Deutsch", name:"Deutsch", flag:"🇩🇪" },
+    { code:"Русский", name:"Русский", flag:"🇷🇺" },
+    { code:"Español", name:"Español", flag:"🇪🇸" },
+    { code:"हिन्दी", name:"हिन्दी", flag:"🇮🇳" },
+    { code:"Indonesia", name:"Indonesia", flag:"🇮🇩" }
+  ];
+
+  const uiMap = {
+    adult: { English:"Adult", العربية:"بالغ", اردو:"بالغ", Français:"Adulte", Deutsch:"Erwachsener", Русский:"Взрослый", Español:"Adulto", हिन्दी:"वयस्क", Indonesia:"Dewasa" },
+    child: { English:"Child", العربية:"طفل", اردو:"بچہ", Français:"Enfant", Deutsch:"Kind", Русский:"Ребёнок", Español:"Niño", हिन्दी:"बच्चा", Indonesia:"Anak" },
+    guide: { English:"Guide", العربية:"الدليل", اردو:"رہنما", Français:"Guide", Deutsch:"Leitfaden", Русский:"Руководство", Español:"Guía", हिन्दी:"मार्गदर्शिका", Indonesia:"Panduan" },
+    extras: { English:"Extras", العربية:"إضافات", اردو:"اضافی", Français:"Extra", Deutsch:"Extras", Русский:"Дополнительно", Español:"Extras", हिन्दी:"अतिरिक्त", Indonesia:"Tambahan" },
+    settings: { English:"Settings", العربية:"الإعدادات", اردو:"ترتیبات", Français:"Paramètres", Deutsch:"Einstellungen", Русский:"Настройки", Español:"Ajustes", हिन्दी:"सेटिंग्स", Indonesia:"Pengaturan" },
+    language: { English:"Language", العربية:"اللغة", اردو:"زبان", Français:"Langue", Deutsch:"Sprache", Русский:"Язык", Español:"Idioma", हिन्दी:"भाषा", Indonesia:"Bahasa" },
+    fontSize: { English:"Font Size", العربية:"حجم الخط", اردو:"فونٹ سائز", Français:"Taille police", Deutsch:"Schriftgröße", Русский:"Размер шрифта", Español:"Tamaño fuente", हिन्दी:"फ़ॉन्ट आकार", Indonesia:"Ukuran Font" },
+    themeModeTitle: { English:"Theme Mode", العربية:"وضع المظهر", اردو:"تھيم موڈ", Français:"Mode de thème", Deutsch:"Design-Modus", Русский:"Режим темы", Español:"Modo de tema", हिन्दी:"थीम मोड", Indonesia:"Mode Tema" },
+    small: { English:"Small", العربية:"صغير", اردو:"چھوٹا", Français:"Petit", Deutsch:"Klein", Русский:"Маленький", Español:"Pequeño", हिन्दी:"छोटा", Indonesia:"Kecil" },
+    medium: { English:"Medium", العربية:"متوسط", اردو:"درمیانی", Français:"Moyen", Deutsch:"Mittel", Русский:"Средний", Español:"Mediano", हिन्दी:"मध्यम", Indonesia:"Sedang" },
+    large: { English:"Large", العربية:"كبير", اردو:"بڑا", Français:"Grand", Deutsch:"Groß", Русский:"Большой", Español:"Grande", हिन्दी:"बड़ा", Indonesia:"Besar" },
+    huge: { English:"Huge", العربية:"ضخم", اردو:"بہت بڑا", Français:"Énorme", Deutsch:"Riesig", Русский:"Огромный", Español:"Enorme", हिन्दी:"विशाल", Indonesia:"Sangat Besar" },
+    lightTheme: { English:"Light", العربية:"فاتح", اردو:"روشن", Français:"Clair", Deutsch:"Hell", Русский:"Светлый", Español:"Claro", हिन्दी:"हल्का", Indonesia:"Terang" },
+    darkTheme: { English:"Dark", العربية:"داكن", اردو:"تاریک", Français:"Sombre", Deutsch:"Dunkel", Русский:"Тёмный", Español:"Oscuro", हिन्दी:"गहरा", Indonesia:"Gelap" },
+    autoTheme: { English:"Auto", العربية:"تلقائي", اردو:"خودکار", Français:"Auto", Deutsch:"Auto", Русский:"Авто", Español:"Auto", हिन्दी:"स्वचालित", Indonesia:"Otomatis" },
+    accentLabel: { English:"Accent Color", العربية:"اللون المميز", اردو:"نمایاں رنگ", Français:"Couleur", Deutsch:"Farbe", Русский:"Цвет", Español:"Color", हिन्दी:"रंग", Indonesia:"Warna" },
+    continueBtn: { English:"Continue →", العربية:"متابعة ←", اردو:"جاری رکھیں ←", Français:"Continuer →", Deutsch:"Weiter →", Русский:"Продолжить →", Español:"Continuar →", हिन्दी:"जारी रखें →", Indonesia:"Lanjutkan →" },
+    dontAskAgain: { English:"Don't ask me again", العربية:"لا تسألني مرة أخرى", اردو:"مجھ سے دوبارہ مت پوچھیں", Français:"Ne plus me demander", Deutsch:"Nicht mehr fragen", Русский:"Больше не спрашивать", Español:"No volver a preguntar", हिन्दी:"मुझसे दोबारा न पूछें", Indonesia:"Jangan tanya saya lagi" },
+    startApp: { English:"Start App", العربية:"ابدأ التطبيق", اردو:"ایپ شروع کریں", Français:"Démarrer", Deutsch:"App starten", Русский:"Начать", Español:"Iniciar App", हिन्दी:"ऐप शुरू करें", Indonesia:"Mulai Aplikasi" },
+    additionalColors: { English:"Additional Colors", العربية:"ألوان إضافية", اردو:"اضافی رنگ", Français:"Couleurs supplémentaires", Deutsch:"Weitere Farben", Русский:"Дополнительные цвета", Español:"Colores adicionales", हिन्दी:"अतिरिक्त रंग", Indonesia:"Warna Tambahan" },
+    close: { English:"Close", العربية:"إغلاق", اردو:"بند کریں", Français:"Fermer", Deutsch:"Schließen", Русский:"Закрыть", Español:"Cerrar", हिन्दी:"बंद करें", Indonesia:"Tutup" },
+    shareLabel: { English:"Share QR Code", العربية:"مشاركة رمز QR", اردو:"QR کوڈ شیئر کریں", Français:"Partager QR", Deutsch:"QR teilen", Русский:"Поделиться QR", Español:"Compartir QR", हिन्दी:"QR साझा करें", Indonesia:"Bagikan QR" },
+    comingSoon: { English:"COMING SOON", العربية:"قريباً", اردو:"عنقریب", Français:"BIENTÔT", Deutsch:"DEMNÄCHST", Русский:"СКОРО", Español:"MUY PRONTO", हिन्दी:"शीघ्र ही", Indonesia:"SEGERA HADIR" },
+    shareReward: { English:"Share the Reward", العربية:"شارك الأجر", اردو:"ثواب شیئر کریں", Français:"Partager la récompense", Deutsch:"Belohnung teilen", Русский:"Поделиться наградой", Español:"Compartir la recompensa", हिन्दी:"पुरस्कार साझा करें", Indonesia:"Bagikan Pahala" },
+    resetToFirst: { English:"Reset to my first chosen color", العربية:"إعادة تعيين إلى اللون المختار الأول", اردو:"میرے پہلے منتخب کردہ رنگ پر دوبارہ ترتیب دیں", Français:"Réinitialiser à ma première couleur choisie", Deutsch:"Auf meine erste ausgewählte Farbe zurücksetzen", Русский:"Сбросить до моего первого выбранного цвета", Español:"Restablecer a mi primer color elegido", हिन्दी:"मेरे पहले चुने गए रंग पर रीसेट करें", Indonesia:"Atur ulang ke warna pertama yang saya pilih" },
+    selectLangTitle: { English:"Select Language", العربية:"اختر اللغة", اردو:"زبان منتخب کریں", Français:"Choisir la langue", Deutsch:"Sprache wählen", Русский:"Выберите язык", Español:"Seleccionar idioma", हिन्दी:"भाषा चुनें", Indonesia:"Pilih Bahasa" },
+    chooseThemeTitle: { English:"Choose Theme Color", العربية:"اختر اللون المميز", اردو:"رنگ منتخب کریں", Français:"Choisir la couleur", Deutsch:"Farbe wählen", Русский:"Выберите цвет", Español:"Elegir color", हिन्दी:"रंग चुनें", Indonesia:"Pilih Warna" },
+  };
+
+  function t(key, alt) { return (uiMap[key]?.[currentLang] || alt || key); }
+
+  let currentLang = localStorage.getItem("userLang") || "English";
+  let currentStep = 0, isChildMode = false;
+  let userAccent = localStorage.getItem("userAccent") || "#006666";
+  let initialMasterColor = localStorage.getItem("initialMasterColor") || userAccent;
+  let swipeStartX = null;
+  let currentThemeMode = localStorage.getItem("themeMode") || "auto";
+  let currentFont = "medium";
+
+  function applyTheme() {
+    let isDark = false;
+    if (currentThemeMode === "auto") isDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    else if (currentThemeMode === "dark") isDark = true;
+    else isDark = false;
+    if (isDark) { document.body.classList.add("dark"); document.body.classList.remove("light"); }
+    else { document.body.classList.add("light"); document.body.classList.remove("dark"); }
+    document.querySelectorAll('.theme-btn').forEach(btn => {
+      if (btn.dataset.theme === currentThemeMode) btn.classList.add('active');
+      else btn.classList.remove('active');
+    });
+  }
+  function setThemeMode(mode, save = true) {
+    currentThemeMode = mode;
+    applyTheme();
+    if (save) localStorage.setItem("themeMode", mode);
+  }
+
+  function getTranslation(idx) { return stepsData[idx].translations[currentLang] || stepsData[idx].translations["English"]; }
+  function getTitle(idx) { return stepsData[idx].title[currentLang] || stepsData[idx].title["English"]; }
+  
+  function applyFontScale() {
+    const sizes = { small:"12px", medium:"15px", large:"19px", huge:"24px" };
+    document.documentElement.style.fontSize = sizes[currentFont];
+    document.querySelectorAll('.font-btn').forEach(btn => {
+      if (btn.dataset.font === currentFont) btn.classList.add('active');
+      else btn.classList.remove('active');
+    });
+  }
+  function setAccentColor(hex, save=true, updateMaster=false) {
+    userAccent = hex;
+    document.documentElement.style.setProperty('--accent', hex);
+    const [r,g,b] = [parseInt(hex.slice(1,3),16), parseInt(hex.slice(3,5),16), parseInt(hex.slice(5,7),16)];
+    document.documentElement.style.setProperty('--accent-rgb', `${r}, ${g}, ${b}`);
+    if (updateMaster) { initialMasterColor = hex; localStorage.setItem("initialMasterColor", hex); }
+    if (save) localStorage.setItem("userAccent", hex);
+    updateUI();
+  }
+  function resetToInitialColor() { setAccentColor(initialMasterColor, true, false); }
+
+  function buildSlides() {
+    const track = document.getElementById('swipeTrack');
+    if (!track) return;
+    track.innerHTML = '';
+    stepsData.forEach((step, idx) => {
+      const slide = document.createElement('div'); slide.className = 'swipe-slide';
+      const translation = getTranslation(idx);
+      const title = getTitle(idx);
+      slide.innerHTML = `
+        <div class="dua-card">
+          <div class="dua-header">
+            <div class="dua-header-icon">${step.icon}</div>
+            <div>
+              <div class="dua-header-title">${title}</div>
+              <div class="dua-header-subtitle">${isChildMode ? t('child', 'Child') : t('adult', 'Adult')}</div>
+            </div>
+          </div>
+          <div class="dua-body">
+            <div class="arabic-text" dir="rtl">${step.arabic}</div>
+            ${currentLang !== "العربية" ? `<div class="transliteration">${step.translit}</div><div class="translation">${translation}</div>` : ''}
+            
+            <div class="card-actions-row">
+              <button class="styled-action-btn" onclick="openQrModal()" style="margin-top:0;">📱 ${t('shareLabel', 'Share QR Code')}</button>
+            </div>
+          </div>
+        </div>
+      `;
+      track.appendChild(slide);
+    });
+    updateTrackPosition();
+  }
+  
+  function updateTrackPosition() {
+    const track = document.getElementById('swipeTrack');
+    if (track) track.style.transform = `translate3d(-${currentStep * 100}%, 0, 0)`;
+  }
+  function updateProgressBar() {
+    const container = document.getElementById('progressContainer');
+    if (!container) return;
+    container.innerHTML = '';
+    stepsData.forEach((_, idx) => {
+      const seg = document.createElement('div'); seg.className = 'prog-segment';
+      const fill = document.createElement('div'); fill.className = 'prog-fill';
+      if (idx <= currentStep) fill.style.width = '100%';
+      seg.appendChild(fill);
+      container.appendChild(seg);
+    });
+  }
+  function goToStep(newStep) {
+    if (newStep < 0 || newStep >= stepsData.length) return;
+    currentStep = newStep;
+    updateTrackPosition();
+    updateProgressBar();
+  }
+  function handleTouchStart(e) { swipeStartX = e.touches[0].clientX; }
+  function handleTouchEnd(e) {
+    if (swipeStartX === null) return;
+    const diff = e.changedTouches[0].clientX - swipeStartX;
+    if (Math.abs(diff) > 50) diff > 0 ? goToStep(currentStep-1) : goToStep(currentStep+1);
+    swipeStartX = null;
+  }
+
+  function openQrModal() {
+    document.getElementById('qrPopup').classList.add('active');
+    const box = document.getElementById('qrCodeBox');
+    box.innerHTML = '';
+    setTimeout(() => { new QRCode(box, { text: window.location.href, width: 140, height: 140 }); }, 50);
+  }
+
+  function populateLanguageList() {
+    const langPanel = document.getElementById('languagePanel');
+    langPanel.innerHTML = `
+      <div class="setting-group">
+        <div class="setting-title">🌐 ${t('language', 'Language')}</div>
+        <div class="lang-grid-container" id="fullLangList"></div>
+      </div>
+    `;
+    const grid = document.getElementById('fullLangList');
+    languages.forEach(lang => {
+      const btn = document.createElement('button');
+      btn.className = `lang-btn-item ${lang.code === currentLang ? 'active' : ''}`;
+      btn.innerHTML = `<span>${lang.flag}</span> <span>${lang.name}</span>`;
+      btn.onclick = () => {
+        currentLang = lang.code;
+        localStorage.setItem("userLang", lang.code);
+        updateUI();
+      };
+      grid.appendChild(btn);
+    });
+  }
+
+  const presetColors = ["#006666", "#0F766E", "#1E3A8A", "#CA8A04", "#6B21A8", "#2C2C2C"];
+  const premiumColors = [
+    "#006666", "#1E3A8A", "#0F766E", "#059669", "#65A30D",
+    "#CA8A04", "#DC2626", "#DB2777", "#9333EA", "#6B21A8",
+    "#4C1D95", "#0891B2", "#0D9488", "#16A34A", "#EAB308",
+    "#F97316", "#EF4444", "#EC4899", "#8B5CF6", "#6366F1"
+  ];
+
+  function buildPremiumColorGrid() {
+    const grid = document.getElementById('premiumColorGrid');
+    if (!grid) return;
+    grid.innerHTML = '';
+    premiumColors.forEach(color => {
+      const swatch = document.createElement('div');
+      swatch.className = 'premium-color-swatch';
+      if (color.toUpperCase() === userAccent.toUpperCase()) swatch.classList.add('selected');
+      swatch.style.backgroundColor = color;
+      swatch.onclick = () => { setAccentColor(color, true, false); closeModal(); };
+      grid.appendChild(swatch);
+    });
+  }
+
+  function openCustomColor() { document.getElementById('customColorModal').classList.add('active'); buildPremiumColorGrid(); }
+  function closeModal() { document.getElementById('customColorModal').classList.remove('active'); }
+
+  function populateExtrasSettings() {
+    document.getElementById('extrasPanel').innerHTML = `
+      <div class="coming-soon-wrapper">
+        <div class="coming-soon-title">${t('comingSoon', 'COMING SOON')}</div>
+      </div>
+    `;
+    
+    document.getElementById('settingsPanel').innerHTML = `
+      <div class="setting-group"><div class="setting-title">${t('fontSize', 'Font Size')}</div>
+        <div class="pill-button-group">
+          <button data-font="small" class="pill-btn font-btn">${t('small', 'Small')}</button>
+          <button data-font="medium" class="pill-btn font-btn">${t('medium', 'Medium')}</button>
+          <button data-font="large" class="pill-btn font-btn">${t('large', 'Large')}</button>
+          <button data-font="huge" class="pill-btn font-btn">${t('huge', 'Huge')}</button>
+        </div>
+      </div>
+      <div class="setting-group"><div class="setting-title">${t('themeModeTitle', 'Theme Mode')}</div>
+        <div class="pill-button-group">
+          <button data-theme="auto" class="pill-btn theme-btn">${t('autoTheme', 'Auto')}</button>
+          <button data-theme="light" class="pill-btn theme-btn">${t('lightTheme', 'Light')}</button>
+          <button data-theme="dark" class="pill-btn theme-btn">${t('darkTheme', 'Dark')}</button>
+        </div>
+      </div>
+      <div class="setting-group"><div class="setting-title">${t('accentLabel', 'Accent Color')}</div>
+        <div class="color-palette" id="settingsColorPalette"></div>
+        <button id="customColorBtn" class="styled-action-btn">${t('additionalColors', 'Additional Colors')}</button>
+        <button id="resetColorBtn" class="styled-action-btn">${t('resetToFirst', 'Reset to my first chosen color')}</button>
+      </div>
+    `;
+
+    const paletteContainer = document.getElementById('settingsColorPalette');
+    paletteContainer.innerHTML = '';
+    presetColors.forEach(color => {
+      const circle = document.createElement('div');
+      circle.className = 'color-circle';
+      if (color.toUpperCase() === userAccent.toUpperCase()) circle.classList.add('active');
+      circle.style.backgroundColor = color;
+      circle.onclick = () => setAccentColor(color, true, false);
+      paletteContainer.appendChild(circle);
+    });
+
+    document.getElementById('customColorBtn').onclick = openCustomColor;
+    document.getElementById('resetColorBtn').onclick = resetToInitialColor;
+    document.querySelectorAll('.theme-btn').forEach(btn => btn.onclick = () => setThemeMode(btn.dataset.theme, true));
+    document.querySelectorAll('.font-btn').forEach(btn => btn.onclick = () => { currentFont = btn.dataset.font; applyFontScale(); });
+    applyFontScale(); applyTheme();
+  }
+
+  function updateUI() {
+    document.getElementById('guideLabel').innerText = t('guide', 'Guide');
+    document.getElementById('extrasLabel').innerText = t('extras', 'Extras');
+    document.getElementById('settingsLabel').innerText = t('settings', 'Settings');
+    document.getElementById('languageLabel').innerText = t('language', 'Language');
+    document.getElementById('modalTitle').innerText = t('additionalColors', 'Additional Colors');
+    document.getElementById('closeQrBtn').innerText = t('close', 'Close');
+    document.getElementById('qrLabel').innerText = `${t('shareReward', 'Share the Reward')} | ${t('shareLabel', 'Share QR Code')}`;
+    
+    document.getElementById('onboardLangTitle').innerText = t('selectLangTitle', 'Select Language');
+    document.getElementById('dontAskLabel').innerText = t('dontAskAgain', 'Don\'t ask me again');
+    document.getElementById('saveLangBtn').innerText = t('continueBtn', 'Continue →');
+    document.getElementById('onboardColorTitle').innerText = t('chooseThemeTitle', 'Choose Theme Color');
+    document.getElementById('startAppBtn').innerText = t('startApp', 'Start App');
+
+    buildSlides(); populateLanguageList(); populateExtrasSettings();
+  }
+
+  function showOnboardingIfNeeded() {
+    const skipOnboard = localStorage.getItem("skipOnboarding");
+    if (skipOnboard === "true") return;
+
+    document.getElementById('langOnboardingModal').style.display = 'flex';
+    const grid = document.getElementById('onboardLangGrid');
+    grid.innerHTML = '';
+    languages.forEach(lang => {
+      const btn = document.createElement('button');
+      btn.className = `lang-btn-item ${lang.code === currentLang ? 'active' : ''}`;
+      btn.innerHTML = `<span>${lang.flag}</span> <span>${lang.name}</span>`;
+      btn.onclick = () => {
+        currentLang = lang.code;
+        localStorage.setItem("userLang", lang.code);
+        document.querySelectorAll('#onboardLangGrid .lang-btn-item').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        updateUI();
+      };
+      grid.appendChild(btn);
+    });
+  }
+
+  function proceedToColorOnboarding() {
+    const isChecked = document.getElementById('dontAskCheckbox').checked;
+    if (isChecked) {
+      localStorage.setItem("skipOnboarding", "true");
+    }
+
+    document.getElementById('langOnboardingModal').style.display = 'none';
+    document.getElementById('colorOnboardingModal').style.display = 'flex';
+    const palette = document.getElementById('onboardColorPalette');
+    palette.innerHTML = '';
+    presetColors.forEach(color => {
+      const circle = document.createElement('div');
+      circle.className = 'color-circle';
+      if (color.toUpperCase() === userAccent.toUpperCase()) circle.classList.add('active');
+      circle.style.backgroundColor = color;
+      circle.onclick = () => {
+        setAccentColor(color, true, true);
+        document.querySelectorAll('#onboardColorPalette .color-circle').forEach(c => c.classList.remove('active'));
+        circle.classList.add('active');
+      };
+      palette.appendChild(circle);
+    });
+  }
+
+  function finishOnboarding() {
+    document.getElementById('colorOnboardingModal').style.display = 'none';
+  }
+
+  function switchTab(tab) {
+    document.getElementById('extrasPanel').classList.remove('active');
+    document.getElementById('settingsPanel').classList.remove('active');
+    document.getElementById('languagePanel').classList.remove('active');
+    if (tab === 'guide') {
+      document.getElementById('swipeContainer').style.display = 'flex';
+      document.getElementById('progressHeader').style.display = 'block';
+    } else {
+      document.getElementById('swipeContainer').style.display = 'none';
+      document.getElementById('progressHeader').style.display = 'none';
+      if (tab === 'extras') document.getElementById('extrasPanel').classList.add('active');
+      else if (tab === 'settings') document.getElementById('settingsPanel').classList.add('active');
+      else if (tab === 'language') document.getElementById('languagePanel').classList.add('active');
+    }
+    ['navGuide','navExtras','navSettings','navLanguage'].forEach(id => document.getElementById(id).classList.remove('active'));
+    document.getElementById(`nav${tab.charAt(0).toUpperCase()+tab.slice(1)}`).classList.add('active');
+  }
+
+  window.switchTab = switchTab;
+  window.closePopup = (id) => { document.getElementById(id).classList.remove('active'); };
+  window.closeModal = closeModal;
+  window.proceedToColorOnboarding = proceedToColorOnboarding;
+  window.finishOnboarding = finishOnboarding;
+  window.openQrModal = openQrModal;
+  window.goToStep = goToStep;
+
+  (function init() {
+    setThemeMode(currentThemeMode, false);
+    setAccentColor(userAccent, false, false);
+    updateUI();
+    updateProgressBar();
+    buildSlides();
+    const container = document.getElementById('swipeContainer');
+    container.addEventListener('touchstart', handleTouchStart);
+    container.addEventListener('touchend', handleTouchEnd);
+    document.getElementById('navGuide').onclick = () => switchTab('guide');
+    document.getElementById('navExtras').onclick = () => switchTab('extras');
+    document.getElementById('navSettings').onclick = () => switchTab('settings');
+    document.getElementById('navLanguage').onclick = () => switchTab('language');
+    showOnboardingIfNeeded();
+  })();
+</script>
+</body>
+</html>
