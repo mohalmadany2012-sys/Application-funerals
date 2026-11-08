@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes">
+  <meta name="theme-color" content="#0F172A">
+  <title>Janazah Guide | دليل الجنازة</title>
+  
+  <!-- الخطوط الخارجية -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&family=Noto+Nastaliq+Urdu:wght@400;500;600&family=Noto+Sans+Arabic:wght@400;500;600;700&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  
+  <!-- ملف التنسيقات الخارجي -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="dark">
+
+<!-- إشعار إتمام الصلاة والقبول -->
+<div id="completionBanner" class="completion-banner">
+  <span>✨</span>
+  <span id="completionBannerText">تقبل الله - تم إنهاء الصلاة</span>
+</div>
+
+<!-- Onboarding Modal Step 1: Language Selection -->
+<div id="langOnboardingModal" class="onboarding-overlay" style="display:none;">
+  <div class="onboarding-card">
+    <div style="font-size:2.3rem; margin-bottom:10px;">🌐</div>
+    <h2 id="onboardLangTitle" style="margin-bottom:12px; font-size:1.25rem;">Select Language | اختر اللغة</h2>
+    <div class="lang-grid-container" id="onboardLangGrid"></div>
+    
+    <label class="checkbox-container">
+      <input type="checkbox" id="dontAskCheckbox">
+      <span id="dontAskLabel">Don't ask me again</span>
+    </label>
+
+    <button id="saveLangBtn" class="btn-primary" onclick="proceedToColorOnboarding()">Continue →</button>
+  </div>
+</div>
+
+<!-- Onboarding Modal Step 2: Theme Color Selection (7 Luxury & 40 Full Colors) -->
+<div id="colorOnboardingModal" class="onboarding-overlay" style="display:none;">
+  <div class="onboarding-card">
+    <div style="font-size:2.3rem; margin-bottom:8px;">🎨</div>
+    <h2 id="onboardColorTitle" style="font-size:1.25rem;">اختر اللون المميز</h2>
+    <p style="font-size:0.78rem; color:var(--text-secondary); margin-bottom:10px;" id="onboardColorSub">اختر اللون المفضل لواجهة التطبيق</p>
+    <div class="color-palette" id="onboardColorPalette"></div>
+    <button id="startAppBtn" class="btn-primary" onclick="finishOnboarding()">ابدأ التطبيق</button>
+  </div>
+</div>
+
+<div class="app" id="app">
+  <!-- شريط جلسة الصلاة المباشرة: زر إنهاء الصلاة فقط مع شريط التقدم -->
+  <div id="prayerSessionTopBar" style="display: none;">
+    <div class="session-top-bar">
+      <div class="session-progress-wrapper">
+        <div class="progress-strip" id="progressContainer"></div>
+      </div>
+      <button class="btn-exit-session" onclick="exitPrayerSession(true)">
+        <span>✕</span>
+        <span id="exitSessionBtnText">إنهاء الصلاة</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- شريط أدوات التخصيص المباشر لأزرار الشاشة (Live In-Session Customizer) -->
+  <div id="liveCustomizerToolbar" class="live-customizer-toolbar" style="display: none;">
+    <div class="customizer-toolbar-header">
+      <span class="customizer-title">⚙️ تخصيص الأزرار الحي</span>
+      <button class="btn-customizer-save" onclick="saveAndExitLiveCustomizer()">حفظ وخروج</button>
+    </div>
+    
+    <div class="customizer-controls-grid">
+      <div class="customizer-control-col">
+        <label>الحجم: <span id="scaleValLabel">1.0x</span></label>
+        <input type="range" id="customScaleSlider" min="0.6" max="1.5" step="0.05" value="1.0" oninput="updateLiveButtonScale(this.value)">
+      </div>
+      <div class="customizer-control-col">
+        <label>الشفافية: <span id="opacityValLabel">90%</span></label>
+        <input type="range" id="customOpacitySlider" min="0.2" max="1.0" step="0.05" value="0.9" oninput="updateLiveButtonOpacity(this.value)">
+      </div>
+    </div>
+
+    <div class="customizer-footer-actions">
+      <label class="customizer-checkbox-label">
+        <input type="checkbox" id="chkPerStepPos" onchange="togglePerStepPositioning(this.checked)">
+        <span>موضع مخصص لكل تكبيرة على حدة</span>
+      </label>
+      <button class="btn-customizer-reset" onclick="resetLiveButtonCustomizer()">استعادة الافتراضي</button>
+    </div>
+  </div>
+
+  <!-- الشاشة الافتتاحية السابقة لبدء الصلاة (يظل زر الـ QR ثابتاً فيها) -->
+  <div id="startPrayerScreen" class="start-session-screen">
+    <div class="start-session-card">
+      <div class="prayer-emblem">🕌</div>
+      <h2 class="start-session-title" id="startScreenTitle">صلاة الجنازة</h2>
+      <p class="start-session-desc" id="startScreenDesc">
+        دليل تفاعلي متزامن خطوة بخطوة مع أربع تكبيرات، يدعم التبديل اللمسي والصوتي والحركي.
+      </p>
+      <button class="btn-start-prayer" onclick="startPrayerSession()">
+        <span>▶</span>
+        <span id="btnStartPrayerText">ابدأ صلاة الجنازة</span>
+      </button>
+      <button class="btn-qr-top" onclick="openQrModal()" style="margin-top:8px; padding:10px 20px; font-size:0.9rem;">
+        <span>📲</span>
+        <span id="startScreenShareText">شارك الأجر (رمز QR)</span>
+      </button>
+    </div>
+  </div>
+  
+  <!-- حاوية التكبيرات التفاعلية والجلسة المباشرة -->
+  <div class="swipe-container" id="swipeContainer">
+    <!-- حاوية أزرار التقليب الحرة فوق الشاشة -->
+    <div class="on-screen-nav-controls" id="onScreenNavControls"></div>
+    <div class="swipe-track" id="swipeTrack"></div>
+  </div>
+  
+  <!-- الألواح والتبويبات الأساسية -->
+  <div id="extrasPanel" class="panel"></div>
+  <div id="settingsPanel" class="panel"></div>
+  <div id="languagePanel" class="panel"></div>
+  
+  <!-- شريط التنقل السفلي -->
+  <div class="bottom-nav" id="bottomNav">
+    <div id="navGuide" class="nav-item active"><div class="nav-icon">📖</div><div class="nav-label" id="guideLabel">الدليل</div></div>
+    <div id="navExtras" class="nav-item"><div class="nav-icon">✨</div><div class="nav-label" id="extrasLabel">الإضافات</div></div>
+    <div id="navSettings" class="nav-item"><div class="nav-icon">⚙️</div><div class="nav-label" id="settingsLabel">الإعدادات</div></div>
+    <div id="navLanguage" class="nav-item"><div class="nav-icon">🌐</div><div class="nav-label" id="languageLabel">اللغة</div></div>
+  </div>
+</div>
+
+<!-- نافذة السبحة التفاعلية المبتكرة داخل الإضافات -->
+<div id="tasbeehModal" class="modal">
+  <div class="modal-card tasbeeh-modal-card">
+    <div class="tasbeeh-header">
+      <div class="tasbeeh-title">السبحة الإلكترونية المتطورة</div>
+      <button class="modal-close-icon" onclick="closeTasbeehModal()">✕</button>
+    </div>
+
+    <!-- عداد لمسي ثلاثي الأبعاد وعصري بدلاً من الشكل التقليدي -->
+    <div class="tasbeeh-core-area">
+      <div class="tasbeeh-ring-outer" id="tasbeehTouchRing" onclick="handleTasbeehClick()">
+        <svg class="tasbeeh-svg-ring" viewBox="0 0 160 160">
+          <circle class="tasbeeh-circle-bg" cx="80" cy="80" r="70"></circle>
+          <circle class="tasbeeh-circle-prog" id="tasbeehCircleProg" cx="80" cy="80" r="70"></circle>
+        </svg>
+        <div class="tasbeeh-center-content">
+          <div class="tasbeeh-counter-number" id="tasbeehCountDisplay">0</div>
+          <div class="tasbeeh-target-label" id="tasbeehTargetDisplay">الهدف: 33</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- خيارات وتحكم السبحة المتطورة -->
+    <div class="tasbeeh-settings-box">
+      <div class="tasbeeh-setting-row">
+        <span>الهدف الذكي:</span>
+        <div class="pill-button-group tasbeeh-target-pills">
+          <button type="button" class="pill-btn active" onclick="setTasbeehTarget(33)">33</button>
+          <button type="button" class="pill-btn" onclick="setTasbeehTarget(100)">100</button>
+          <button type="button" class="pill-btn" onclick="setTasbeehTarget(0)">حر ∞</button>
+        </div>
+      </div>
+
+      <div class="tasbeeh-setting-row">
+        <span>الاهتزاز اللمسي (Haptic):</span>
+        <label class="switch-label">
+          <input type="checkbox" id="chkTasbeehHaptic" checked onchange="toggleTasbeehHaptic(this.checked)">
+          <span class="switch-slider"></span>
+        </label>
+      </div>
+
+      <div class="tasbeeh-setting-row">
+        <span>حجم حلقة التسبيح:</span>
+        <input type="range" min="130" max="220" value="160" oninput="adjustTasbeehRingSize(this.value)">
+      </div>
+
+      <button type="button" class="btn-tasbeeh-reset" onclick="resetTasbeehCounter()">
+        ↺ تصفير العداد
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- نافذة مشاركة الأجر بصورة الـ QR -->
+<div id="qrPopup" class="popup-overlay">
+  <div class="popup-card">
+    <div class="qr-label" id="qrLabel" style="font-weight:700; margin-bottom:12px; font-size:1.1rem;">شارك الأجر</div>
+    <div style="background:#fff; border-radius:16px; padding:12px; display:inline-block; margin-bottom:12px;">
+      <img src="QR Code.png" alt="QR Code" style="width: 170px; height: 170px; border-radius: 12px; display:block;" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'170\' height=\'170\' viewBox=\'0 0 170 170\'><rect width=\'170\' height=\'170\' fill=\'%23f3f4f6\'/><text x=\'50%25\' y=\'50%25\' font-size=\'14\' text-anchor=\'middle\' fill=\'%234b5563\' dy=\'.3em\'>QR Code</text></svg>';" />
+    </div>
+    <p style="font-size:0.82rem; color:var(--text-secondary); margin-bottom:14px;" id="qrSubText">امسح الرمز لنشر تطبيق دليل الجنازة ونيل الأجر</p>
+    <button id="closeQrBtn" class="btn-secondary" onclick="closePopup('qrPopup')">إغلاق</button>
+  </div>
+</div>
+
+<!-- نافذة التلميحات والشرح (Hints Modal) -->
+<div id="hintModal" class="modal">
+  <div class="modal-card">
+    <div style="font-size:2rem; margin-bottom:6px;" id="hintModalIcon">ℹ️</div>
+    <h3 id="hintModalTitle" style="font-size:1.15rem; margin-bottom:8px;">طريقة التنقل</h3>
+    <div id="hintModalContent" class="hint-modal-text"></div>
+    <button onclick="closeHintModal()" class="btn-primary" style="margin-top:4px;" id="hintModalCloseBtn">فهمت ذلك</button>
+  </div>
+</div>
+
+<!-- نافذة الألوان الإضافية (لوحة الـ 40 لوناً) -->
+<div id="customColorModal" class="modal">
+  <div class="modal-card" style="max-width: 440px;">
+    <h3 id="modalTitle" style="margin-bottom: 8px;">الألوان المختارة (40 لوناً)</h3>
+    <div class="color-palette" id="premiumColorPalette"></div>
+    <button onclick="closeModal()" class="btn-secondary" style="margin-top:14px;" id="closeColorModalBtn">إغلاق</button>
+  </div>
+</div>
+
+<!-- تحميل ملفات البيانات والمنطق البرمجي -->
+<script src="duas-data.js"></script>
+<script src="data.js"></script>
+<script src="app.js"></script>
+
+</body>
+</html>
